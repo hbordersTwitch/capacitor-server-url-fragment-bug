@@ -1,0 +1,11 @@
+{
+  "appId": "tv.twitch.capacitorspike",
+  "appName": "capacitor-spike",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}
