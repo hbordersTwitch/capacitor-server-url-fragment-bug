@@ -23,13 +23,13 @@ public class MainActivity extends BridgeActivity {
                         new ContentMapping(
                                 "public/index.html",
                                 "text/html",
-                                "/",
-                                "/index.html"
+                                "/inner",
+                                "/inner/index.html"
                         ),
                         new ContentMapping(
                                 "public/assets/favicon.155239cf.ico",
                                 "image/x-icon",
-                                "/favicon.ico",
+                                "/inner/favicon.ico",
                                 "/assets/favicon.155239cf.ico"
                         ),
                         new ContentMapping(
@@ -50,12 +50,12 @@ public class MainActivity extends BridgeActivity {
                         new ContentMapping(
                                 "public/cordova_plugins.js",
                                 "text/javascript",
-                                "/cordova_plugins.js"
+                                "/inner/cordova_plugins.js"
                         ),
                         new ContentMapping(
                                 "public/cordova.js",
                                 "text/javascript",
-                                "/cordova.js"
+                                "/inner/cordova.js"
                         )
                 );
         mockWebServer.setDispatcher(new Dispatcher() {

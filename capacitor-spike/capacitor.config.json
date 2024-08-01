@@ -4,7 +4,7 @@
   "bundledWebRuntime": false,
   "webDir": "dist",
   "server": {
-    "url": "http://localhost:8080"
+    "url": "http://localhost:8080/inner"
   },
   "plugins": {
     "SplashScreen": {
