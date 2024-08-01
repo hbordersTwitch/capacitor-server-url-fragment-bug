@@ -75,7 +75,7 @@ public class Server {
                 }
             }));
 
-            mockWebServer.start(8080);
+            mockWebServer.start(80);
 
             countDownLatch.await();
         }
