@@ -1,6 +1,4 @@
-package tv.twitch.capacitorspike;
-
-import android.content.res.AssetManager;
+package tv.twitch.server;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,19 +59,14 @@ public final class RecordedRequestServer {
     }
 
     @NonNull
-    private final AssetManager assetManager;
-
-    @NonNull
     private final HashMap<
             String,
             ContentMapping
             > contentMappingsByHttpPath;
 
     public RecordedRequestServer(
-            @NonNull AssetManager assetManager,
             @NonNull ContentMapping... contentMappings
     ) {
-        this.assetManager = assetManager;
         contentMappingsByHttpPath = new HashMap<>(contentMappings.length);
         for (@NonNull final ContentMapping contentMapping : contentMappings) {
             for (@NonNull final String httpPath : contentMapping.httpPaths) {
@@ -106,17 +99,27 @@ public final class RecordedRequestServer {
                     System.err.println("No content mapping for: " + recordedRequest);
                     return new MockResponse();
                 } else {
-                    try (
-                            final InputStream inputStream = assetManager.open(contentMapping.filePath);
-                            final BufferedSource bufferedSource = Okio.buffer(Okio.source(inputStream))
-                    ) {
-                        byte[] bytes = bufferedSource.readByteArray();
-                        @NonNull final MockResponse response = new MockResponse();
-                        try (@NonNull final Buffer body = new Buffer().write(bytes)) {
-                            response.setBody(body);
+                    try (@Nullable InputStream inputStream = RecordedRequestServer.class.getResourceAsStream(contentMapping.filePath)) {
+                        if (inputStream == null) {
+                            System.err.println("No file for content mapping: " + contentMapping);
+                            return new MockResponse();
+                        } else {
+                            try (
+                                    final BufferedSource bufferedSource = Okio.buffer(
+                                            Okio.source(
+                                                    inputStream
+                                            )
+                                    )
+                            ) {
+                                byte[] bytes = bufferedSource.readByteArray();
+                                @NonNull final MockResponse response = new MockResponse();
+                                try (@NonNull final Buffer body = new Buffer().write(bytes)) {
+                                    response.setBody(body);
+                                }
+                                response.setHeader("Content-Type", contentMapping.contentType);
+                                return response;
+                            }
                         }
-                        response.setHeader("Content-Type", contentMapping.contentType);
-                        return response;
                     }
                 }
             }
